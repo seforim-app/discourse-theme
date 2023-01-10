@@ -1,0 +1,50 @@
+<script>
+    // Save a reference to the original history.pushState() method
+    var originalPushState = history.pushState;
+    
+    // Define a new function to push a new state to the history stack
+    function pushState(state, title, url) {
+        // Push a new state to the history stack using the original history.pushState() method
+        originalPushState.apply(history, arguments);
+        
+        // Create a new CustomEvent object for the pushstate event
+        var event = new CustomEvent('pushstate', { detail: state });
+        
+        // Dispatch the pushstate event using the window.dispatchEvent() method
+        window.dispatchEvent(event);
+    }
+    
+    // Override the history.pushState() method with the new pushState() function
+    history.pushState = pushState;
+
+    function checkUrl() {
+        // Define the regular expression for matching allowed paths
+        var pathRegex = /^\/(admin|t\/.+)/;
+        
+        // Get the current path
+        var currentPath = window.location.pathname;
+
+        // Check if the current path matches the regular expression
+        if (!pathRegex.test(currentPath)) {
+            document.documentElement.innerHTML = "";
+            let newUrl = currentPath === '/' ? "https://seforim.app/" : window.location.href.replace('discuss.seforim.app', 'seforim.app/discuss')
+            window.location.replace(newUrl);
+
+        // If the current path does not match the regular expression, fetch the HTML content of the 404 page
+        // fetch("https://seforim.app/404")
+        //   .then(response => response.text())
+        //   .then(html => {
+        //     // Replace the current page's HTML with the HTML of the 404 page
+        //     document.documentElement.innerHTML = html;
+        //     // document.open();
+        //     // document.write(html);
+        //     // document.close();
+        //   });
+        }
+    }
+    
+    // Attach the function to the window.onpopstate event
+    window.addEventListener('popstate', checkUrl);
+    window.addEventListener('pushstate', checkUrl);
+    checkUrl();
+</script>

@@ -1,0 +1,37 @@
+<script>
+$.ajax({
+    url: "https://seforim.app/sso/check",
+    type: "GET",
+    dataType: "json",
+    xhrFields: {
+        withCredentials: true
+    },
+    success: function(responseJson) {
+        let username = Discourse.User.currentProp('username');
+        if (responseJson.sso != !!username) {
+            if (responseJson.sso) {
+                let returnPath = encodeURIComponent(window.location.pathname);
+                window.location = "/session/sso?return_path=" + returnPath;
+            } else {
+                $.ajax({
+                    url: "/session/username",
+                    type: "DELETE",
+                    success: function() {
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+    }
+});
+
+
+$(window).on("message", function(event) {
+  let $iframe = $(".seforim-app-iframe, iframe[src^='https://seforim.app']");
+  let data = event.originalEvent.data;
+
+  if (data.height) {
+    $iframe.animate({ height: data.height }, 100);
+  }
+});
+</script>
