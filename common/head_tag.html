@@ -25,12 +25,11 @@
         var currentPath = window.location.pathname;
 
         // Check if the current path matches the regular expression
-        if (!pathRegex.test(currentPath)) {
+        if (!pathRegex.test(currentPath) || document.getElementsByClassName('page-not-found').length) {
             document.documentElement.innerHTML = "";
             let newUrl = currentPath === '/' ? "https://seforim.app/" : window.location.href.replace('discuss.seforim.app', 'seforim.app/discuss')
             window.location.replace(newUrl);
-
-        } else if (document.getElementsByClassName('page-not-found').length) {
+        } /* else if () {
             // If the current page is a 404 page, fetch the HTML content of the seforim.app 404 page
             document.documentElement.innerHTML = "";
             fetch("https://seforim.app/404")
@@ -42,7 +41,7 @@
                     // document.write(html);
                     // document.close();
                 });
-        }
+        } */
     }
     
     // Attach the function to the window.onpopstate event
