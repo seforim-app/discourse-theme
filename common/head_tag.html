@@ -19,7 +19,7 @@
 
     function checkUrl() {
         // Define the regular expression for matching allowed paths
-        var pathRegex = /^\/(admin|t\/.+)/;
+        var pathRegex = /^\/(login|admin|t\/.+)/;
         
         // Get the current path
         var currentPath = window.location.pathname;
@@ -30,16 +30,18 @@
             let newUrl = currentPath === '/' ? "https://seforim.app/" : window.location.href.replace('discuss.seforim.app', 'seforim.app/discuss')
             window.location.replace(newUrl);
 
-        // If the current path does not match the regular expression, fetch the HTML content of the 404 page
-        // fetch("https://seforim.app/404")
-        //   .then(response => response.text())
-        //   .then(html => {
-        //     // Replace the current page's HTML with the HTML of the 404 page
-        //     document.documentElement.innerHTML = html;
-        //     // document.open();
-        //     // document.write(html);
-        //     // document.close();
-        //   });
+        } else if (document.getElementsByClassName('page-not-found').length) {
+            // If the current page is a 404 page, fetch the HTML content of the seforim.app 404 page
+            document.documentElement.innerHTML = "";
+            fetch("https://seforim.app/404")
+                .then(response => response.text())
+                .then(html => {
+                    // Replace the current page's HTML with the HTML of the seforim.app 404 page
+                    document.documentElement.innerHTML = html;
+                    // document.open();
+                    // document.write(html);
+                    // document.close();
+                });
         }
     }
     
