@@ -34,7 +34,7 @@
             // If the current page is a 404 page, fetch the HTML content of the seforim.app 404 page
             document.documentElement.innerHTML = "";
             fetch("https://seforim.app/404")
-                .then(response => response.text())
+                .then(response => response.text().replace('/static', 'https://seforim.app/static'))
                 .then(html => {
                     // Replace the current page's HTML with the HTML of the seforim.app 404 page
                     document.documentElement.innerHTML = html;
